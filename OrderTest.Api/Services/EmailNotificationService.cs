@@ -1,8 +1,7 @@
 namespace OrderTest.Api.Services;
 
-
 //make all methods async
-public class EmailNotificationService : INotificationService
+public class EmailNotificationService : IEmailNotificationService
 {
     public Task SendEmailAsync(string to, string subject, string body)
     {

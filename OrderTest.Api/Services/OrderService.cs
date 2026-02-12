@@ -7,12 +7,12 @@ namespace OrderTest.Api.Services;
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository _repository;
-    private readonly EmailNotificationService _notificationService;
+    private readonly IEmailNotificationService _notificationService;
     private readonly ILogger _logger;
 
     public OrderService(
         IOrderRepository repository,
-        EmailNotificationService notificationService,
+        IEmailNotificationService notificationService,
         ILogger<OrderService> logger)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
