@@ -9,8 +9,8 @@ namespace OrderTest.Api.Tests;
 [TestFixture]
 public class OrderServiceTests
 {
-    private readonly Mock<IOrderRepository>? _orderRepositoryMock;
-    private readonly Mock<IEmailNotificationService>? _emailNotificationServiceMock;
+    private readonly Mock<IOrderRepository> _orderRepositoryMock;
+    private readonly Mock<IEmailNotificationService> _emailNotificationServiceMock;
     private readonly Mock<ILogger<OrderService>> _loggerMock;
     private readonly OrderService _orderService;
 
