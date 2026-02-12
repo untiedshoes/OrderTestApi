@@ -55,11 +55,11 @@ public class OrderServiceTests
         };
 
         _orderRepositoryMock
-            .Setup(r => r.AddAsync(It.IsAny<Order>()))
+            .Setup(o => o.AddAsync(It.IsAny<Order>()))
             .Returns(Task.CompletedTask);
 
         _emailNotificationServiceMock
-            .Setup(n => n.SendEmailAsync(
+            .Setup(e => e.SendEmailAsync(
                 It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<string>()))
@@ -73,7 +73,7 @@ public class OrderServiceTests
 
         _orderRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Order>()), Times.Once);
 
-        _emailNotificationServiceMock.Verify(n => n.SendEmailAsync(
+        _emailNotificationServiceMock.Verify(e => e.SendEmailAsync(
             order.CustomerEmail,
             "Order created",
             "Your order has been created"),
@@ -85,15 +85,15 @@ public class OrderServiceTests
     {
         var order = new Order
         {
-            CustomerEmail = "test@test.com"
+            CustomerEmail = "craig@untiedshoes.co.uk"
         };
 
         _orderRepositoryMock
-            .Setup(r => r.AddAsync(It.IsAny<Order>()))
+            .Setup(o => o.AddAsync(It.IsAny<Order>()))
             .Returns(Task.CompletedTask);
 
         _emailNotificationServiceMock
-            .Setup(n => n.SendEmailAsync(
+            .Setup(e => e.SendEmailAsync(
                 It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<string>()))
@@ -103,11 +103,35 @@ public class OrderServiceTests
 
         Assert.That(result, Is.Not.Null);
 
-        _orderRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Order>()), Times.Once);
+        _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<Order>()), Times.Once);
 
         _loggerMock.Verify(
             x => x.Log(
                 LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => true),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Once);
+    }
+
+    [Test]
+    public void CreateOrderAsync_ShouldThrowException_WhenRepositoryFails()
+    {
+        var order = new Order
+        {
+            CustomerEmail = "craig@untiedshoes.co.uk"
+        };
+
+        _orderRepositoryMock
+            .Setup(o => o.AddAsync(It.IsAny<Order>()))
+            .ThrowsAsync(new Exception("DB error"));
+
+        Assert.ThrowsAsync<Exception>(() =>
+            _orderService.CreateOrderAsync(order));
+
+        _loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Error,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => true),
                 It.IsAny<Exception>(),
