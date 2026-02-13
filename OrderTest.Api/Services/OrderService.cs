@@ -21,7 +21,7 @@ public class OrderService : IOrderService
     }
 
 
-    public async Task<Order> CreateOrderAsync(Order order)
+    public async Task<Order?> CreateOrderAsync(Order order)
     {
         //make sure we test for null
         if (order is null) throw new ArgumentNullException(nameof(order));
