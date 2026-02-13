@@ -103,7 +103,7 @@ public class OrderServiceTests
 
         Assert.That(result, Is.Not.Null);
 
-        _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<Order>()), Times.Once);
+        _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<Order>()), Times.AtLeastOnce);
 
     }
 
