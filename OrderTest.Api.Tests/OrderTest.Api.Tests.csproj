@@ -25,4 +25,8 @@
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tests\Controllers\" />
+  </ItemGroup>
+
 </Project>
