@@ -7,11 +7,11 @@ namespace OrderTest.Api.Repositories;
 
 public class InMemoryOrderRepository : IOrderRepository
 {
-    private static ConcurrentDictionary<int, Order> _orders = new();
+    private readonly ConcurrentDictionary<int, Order> _orders = new();
 
     public Task AddAsync(Order order)
     {
-        _orders[order.Id] = order; // thread-safe without explicit lock
+        _orders[order.Id] = order;
         return Task.FromResult(order);
     }
 
