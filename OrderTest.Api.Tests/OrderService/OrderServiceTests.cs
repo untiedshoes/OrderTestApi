@@ -37,14 +37,14 @@ public class OrderServiceTests
 
     [Test]
     public void CreateOrderAsync_ShouldThrowException_WhenEmailIsMissing()
-    { 
+    {
         var order = new Order
-        { 
-            CustomerEmail = null 
+        {
+            CustomerEmail = null
         };
-        
+
         var exception = Assert.ThrowsAsync<Exception>(() => _orderService.CreateOrderAsync(order));
-        
+
         Assert.That(exception.Message, Is.EqualTo("Customer email is required."));
     }
 
@@ -165,4 +165,31 @@ public class OrderServiceTests
         Assert.That(result, Is.TypeOf<NotFoundResult>());
         orderServiceMock.Verify(s => s.GetOrderAsync(42), Times.Once);
     }
+
+    [Test]
+    public async Task CreateAsync_ShouldReturn_Ok_WhenOrderIsCreated()
+    {
+        var orderServiceMock = new Mock<IOrderService>();
+        var controller = new OrdersController(orderServiceMock.Object);
+
+        var order = new Order
+        {
+            Id = 1,
+            CustomerEmail = "craig@untiedshoes.co.uk"
+        };
+
+        orderServiceMock.Setup(s => s.CreateOrderAsync(order))
+                        .ReturnsAsync(order);
+
+        var result = await controller.CreateAsync(order);
+
+        Assert.That(result, Is.TypeOf<OkObjectResult>());
+
+        var okResult = result as OkObjectResult;
+
+        Assert.That(okResult!.Value, Is.EqualTo(order));
+        orderServiceMock.Verify(s => s.CreateOrderAsync(order), Times.Once);
+
+    }
+
 }
