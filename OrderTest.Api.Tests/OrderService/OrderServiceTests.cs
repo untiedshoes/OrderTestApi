@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
+using OrderTest.Api.Controllers;
 using OrderTest.Api.Models;
 using OrderTest.Api.Repositories;
 using OrderTest.Api.Services;
@@ -122,5 +124,45 @@ public class OrderServiceTests
         Assert.ThrowsAsync<Exception>(() =>
             _orderService.CreateOrderAsync(order));
 
+    }
+
+    // OrdersController Tests
+
+    [Test]
+    public async Task GetAsync_ShouldReturn_Ok_WhenOrderExists()
+    {
+        var orderServiceMock = new Mock<IOrderService>();
+        var controller = new OrdersController(orderServiceMock.Object);
+
+        var order = new Order
+        {
+            Id = 1,
+            CustomerEmail = "craig@untiedshoes.co.uk"
+        };
+
+        orderServiceMock.Setup(s => s.GetOrderAsync(1))
+                        .ReturnsAsync(order);
+
+        var result = await controller.GetAsync(1);
+
+        Assert.That(result, Is.TypeOf<OkObjectResult>());
+        var okResult = result as OkObjectResult;
+        Assert.That(okResult!.Value, Is.EqualTo(order));
+        orderServiceMock.Verify(s => s.GetOrderAsync(1), Times.Once);
+    }
+
+    [Test]
+    public async Task GetAsync_ShouldReturn_NotFound_WhenOrderDoesNotExist()
+    {
+        var orderServiceMock = new Mock<IOrderService>();
+        var controller = new OrdersController(orderServiceMock.Object);
+
+        orderServiceMock.Setup(s => s.GetOrderAsync(42))
+                        .ReturnsAsync((Order?)null);
+
+        var result = await controller.GetAsync(42);
+
+        Assert.That(result, Is.TypeOf<NotFoundResult>());
+        orderServiceMock.Verify(s => s.GetOrderAsync(42), Times.Once);
     }
 }
