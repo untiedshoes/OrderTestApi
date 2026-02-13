@@ -23,8 +23,6 @@ public class InMemoryOrderRepository : IOrderRepository
 
     public Task<IEnumerable<Order>> GetAllAsync()
     {
-        // Return a snapshot of all orders
-        var snapshot = _orders.Values.ToList();
-        return Task.FromResult((IEnumerable<Order>)snapshot);
+        return Task.FromResult((IEnumerable<Order>)_orders.Values);
     }
 }
