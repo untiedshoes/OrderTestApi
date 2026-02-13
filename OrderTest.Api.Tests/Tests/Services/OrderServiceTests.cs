@@ -39,8 +39,8 @@ public class OrderServiceTests
     [Test]
     public void CreateOrderAsync_ShouldThrowException_WhenEmailIsMissing()
     {
-        var order = new Order { 
-            CustomerEmail = null 
+        var order = new Order {
+            CustomerEmail = null
         };
 
         var exception = Assert.ThrowsAsync<Exception>(() =>
