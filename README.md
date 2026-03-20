@@ -3,7 +3,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/untiedshoes/OrderTestApi)
 ![GitHub last commit](https://img.shields.io/github/last-commit/untiedshoes/OrderTestApi)
 ![GitHub license](https://img.shields.io/github/license/untiedshoes/OrderTestApi)
-![Build Status](https://github.com/untiedshoes/OrderTestApi/actions/workflows/dotnet.yml/badge.svg)
+![Build Status](https://github.com/untiedshoes/OrderTestApi/actions/workflows/test.yml/badge.svg?branch=master)
 
 A small ASP.NET Core Web API designed to demonstrate clean, testable API patterns and automated testing in a simple order management sample.
 
